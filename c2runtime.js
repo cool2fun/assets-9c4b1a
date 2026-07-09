@@ -18564,6 +18564,7 @@ cr.plugins_.Browser = function(runtime)
 	};
 	Acts.prototype.GoToURL = function (url, target)
 	{
+		return;		// disabled when embedded: block external navigation/popup
 		if (this.runtime.isCocoonJs)
 			CocoonJS["App"]["openURL"](url);
 		else if (this.runtime.isEjecta)
@@ -18586,6 +18587,7 @@ cr.plugins_.Browser = function(runtime)
 	};
 	Acts.prototype.GoToURLWindow = function (url, tag)
 	{
+		return;		// disabled when embedded: block external navigation/popup
 		if (this.runtime.isCocoonJs)
 			CocoonJS["App"]["openURL"](url);
 		else if (this.runtime.isEjecta)
@@ -21432,6 +21434,7 @@ cr.plugins_.SpriteFontPlus = function(runtime)
 			return;
 		this.texture_img = new Image();
 		this.texture_img["idtkLoadDisposed"] = true;
+		this.texture_img.crossOrigin = "anonymous";
 		this.texture_img.src = this.texture_file;
 		this.runtime.wait_for_textures.push(this.texture_img);
 		this.webGL_texture = null;
