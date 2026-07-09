@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<base href="./"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>8 Ball Pool</title>
+    <link rel="manifest" href="appmanifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
+
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html, body {
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            touch-action: none;
+            -ms-touch-action: none;
+            width: 100%;
+            height: 100%;
+        }
+        #c2canvasdiv {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            touch-action-delay: none;
+            touch-action: none;
+            -ms-touch-action: none;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="fb-root"></div>
+
+    <script>
+    (function(){
+        if (window.location.protocol.substr(0, 4) === "file") {
+            alert("Exported games won't work until you upload them. (When running on the file:/// protocol, browsers block many features from working for security reasons.)");
+        }
+    })();
+    </script>
+
+    <div id="c2canvasdiv">
+        <canvas id="c2canvas" width="960" height="600">
+            <h1>Your browser does not appear to support HTML5. Try upgrading your browser to the latest version. <a href="http://www.whatbrowser.org">What is a browser?</a>
+            <br/><br/><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br/>
+            <a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br/>
+            <a href="http://www.google.com/chrome/">Google Chrome</a><br/>
+            <a href="http://www.apple.com/safari/download/">Apple Safari</a></h1>
+        </canvas>
+    </div>
+
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="c2runtime.js"></script>
+
+    <script>
+    "use strict";
+
+    // Size the canvas to fill the available space while preserving aspect ratio.
+    var isRetina = false; // set true to render at device pixel ratio
+    var aspectRatioLandscape = 960 / 600;
+
+    function sizeCanvas(w, h) {
+        if (w === 0 || h === 0)
+            return;
+
+        var offsetTop = 0;
+        var winratio = w / h;
+        var aratio = aspectRatioLandscape;
+        var neww = w, newh = h;
+
+        if (winratio > aratio) {
+            neww = h * aratio;
+            offsetTop = 0;
+        } else {
+            newh = w / aratio;
+        }
+
+        var canvas = document.getElementById("c2canvas");
+        canvas.style.width = neww + "px";
+        canvas.style.height = newh + "px";
+
+        if (window["cr_sizeCanvas"])
+            window["cr_sizeCanvas"](neww * (isRetina ? window.devicePixelRatio : 1),
+                                    newh * (isRetina ? window.devicePixelRatio : 1));
+    }
+
+    jQuery(document).ready(function () {
+        // Start the Construct 2 runtime on the canvas.
+        if (window["cr_createRuntime"]) {
+            window["cr_createRuntime"]("c2canvas");
+        }
+
+        // Initial sizing + resize handling.
+        sizeCanvas(jQuery(window).width(), jQuery(window).height());
+        jQuery(window).resize(function () {
+            sizeCanvas(jQuery(window).width(), jQuery(window).height());
+        });
+
+        // Suspend/resume when the tab visibility changes.
+        function onVisibilityChanged() {
+            if (!window["cr_setSuspended"])
+                return;
+            if (document.hidden || document.webkitHidden ||
+                document.mozHidden || document.msHidden)
+                window["cr_setSuspended"](true);
+            else
+                window["cr_setSuspended"](false);
+        }
+
+        document.addEventListener("visibilitychange", onVisibilityChanged, false);
+        document.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+        document.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+        document.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+    });
+    </script>
+
+</body>
+</html>
