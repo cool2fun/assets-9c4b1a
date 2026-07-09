@@ -21496,8 +21496,6 @@ cr.plugins_.SpriteFontPlus = function(runtime)
 		this.textHeight = 0;
 		this.charWidthJSON	  = this.properties[12];
 		this.spaceWidth 	  = this.properties[13];
-		console.log(this.charWidthJSON);
-		jText = this.charWidthJSON;
 		if (this.recycled)
 		{
 			this.lines.length = 0;
